@@ -20,3 +20,9 @@ update:
 
 ./hello-fltk$(EXE): hello-fltk.cxx
 	$(CXX) -o $@ $< $(FLAGS_FLTK) $(FLAGS_PX)
+## -- license --
+install: install-license
+install-license: LICENSE
+	mkdir -p $(DESTDIR)$(PREFIX)/share/doc/cxx-hello-fltk
+	cp LICENSE $(DESTDIR)$(PREFIX)/share/doc/cxx-hello-fltk
+## -- license --
