@@ -1,28 +1,30 @@
-DESTDIR     =
-PREFIX      =/usr/local
-CXX         =c++
-CXXFLAGS    =-Wall -std=c++11 -g
-FLTK_CONFIG =$(shell PATH=$${SYSROOT_PATH:-$$PATH} which fltk-config)
-PROGRAMS    =./hello-fltk$(EXE)
+include mk/fltk.mk
+PROJECT      =cxx-hello-fltk
+VERSION      =1.0.0
+DESTDIR      =
+PREFIX       =/usr/local
+CXX          =c++ -Wall -std=c++11 -g
+PROGRAMS     =hello-fltk$(EXE)
+SOURCES      =hello-fltk.cxx
 
-ifeq ($(FLTK_CONFIG),)
-$(error "Can't find FLTK_CONFIG")
-endif
+##
+CXXFLAGS_FULL=$(CXXFLAGS) $(CPPFLAGS) -DPREFIX='"$(PREFIX)"' $(LDFLAGS) $(FLTK_LIBS) $(LIBS)
 
-FLAGS_FLTK=$(shell $(FLTK_CONFIG) --libs --cxxflags --ldflags | sed '/-mwindows/s/$$/ -static/')
-FLAGS_PX=$(CXXFLAGS) $(CPPFLAGS) -DPREFIX='"$(PREFIX)"' $(LDFLAGS) $(LIBS)
-
+##
 all: $(PROGRAMS)
 clean:
 	rm -f $(PROGRAMS)
 install:
-update:
+	mkdir -p $(DESTDIR)$(PREFIX)/bin
+	cp hello-fltk$(EXE) $(DESTDIR)$(PREFIX)/bin
 
-./hello-fltk$(EXE): hello-fltk.cxx
-	$(CXX) -o $@ $< $(FLAGS_FLTK) $(FLAGS_PX)
-## -- license --
+##
+hello-fltk$(EXE): $(SOURCES)
+	$(CXX) -o $@ $(SOURCES) $(CXXFLAGS_FULL)
+
+## -- BLOCK:license --
 install: install-license
-install-license: LICENSE
-	mkdir -p $(DESTDIR)$(PREFIX)/share/doc/cxx-hello-fltk
-	cp LICENSE $(DESTDIR)$(PREFIX)/share/doc/cxx-hello-fltk
-## -- license --
+install-license: 
+	mkdir -p $(DESTDIR)$(PREFIX)/share/doc/$(PROJECT)
+	cp LICENSE $(DESTDIR)$(PREFIX)/share/doc/$(PROJECT)
+## -- BLOCK:license --
