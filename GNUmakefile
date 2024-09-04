@@ -6,6 +6,7 @@ PREFIX       =/usr/local
 CXX          =c++ -Wall -std=c++11 -g
 PROGRAMS     =hello-fltk$(EXE)
 SOURCES      =hello-fltk.cxx
+DEPENDS      =fltk
 
 ##
 CXXFLAGS_FULL=$(CXXFLAGS) $(CPPFLAGS) -DPREFIX='"$(PREFIX)"' $(LDFLAGS) $(FLTK_LIBS) $(LIBS)
@@ -24,7 +25,7 @@ hello-fltk$(EXE): $(SOURCES)
 
 ## -- BLOCK:license --
 install: install-license
-install-license: 
+install-license: README.md LICENSE
 	mkdir -p $(DESTDIR)$(PREFIX)/share/doc/$(PROJECT)
-	cp LICENSE $(DESTDIR)$(PREFIX)/share/doc/$(PROJECT)
+	cp README.md LICENSE $(DESTDIR)$(PREFIX)/share/doc/$(PROJECT)
 ## -- BLOCK:license --
